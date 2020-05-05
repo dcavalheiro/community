@@ -317,7 +317,7 @@ In this block, the following parameters are set:
 -   **Integrity algorithm**: `SHA256`
 -   **Diffie-Hellman group**: `14`
 -   **IKEv2 Lifetime** : The lifetime of the security associations, after which a reconnection will occur. The default
-    on most SRX platforms is 28800 seconds.
+    on most SRX platforms is 28800 seconds but GCP requires a value of 36000.
 
         [edit]
           root@vsrx#
@@ -325,7 +325,7 @@ In this block, the following parameters are set:
           set security ike proposal ike-phase1-proposal dh-group group14
           set security ike proposal ike-phase1-proposal authentication-algorithm sha-256
           set security ike proposal ike-phase1-proposal encryption-algorithm aes-256-cbc
-          set security ike proposal ike-phase1-proposal lifetime-seconds 28800
+          set security ike proposal ike-phase1-proposal lifetime-seconds 36000
           set security ike policy ike_pol_onprem-2-gcp-vpn mode main
           set security ike policy ike_pol_onprem-2-gcp-vpn proposals ike-phase1-proposal
           set security ike policy ike_pol_onprem-2-gcp-vpn pre-shared-key ascii-text [*****]
@@ -363,7 +363,7 @@ Define the IPsec parameters that are used for IPsec encryption between two IPsec
 
 In this block, the following parameters are set:
 
--   **IPsec SA lifetime**: Setting `lifetime-seconds` to `3600` (1 hour) is recommended for most VPN sessions. The default
+-   **IPsec SA lifetime**: Setting `lifetime-seconds` to `10800` (3 hour) is required for GCP. The default
     on a Juniper SRX is 3600 seconds.
 -   **Perfect Forward Secrecy (PFS)**: PFS forces a new Diffie-Hellman key exchange. The same key will not be generated
     again. This value is set to `group14`. 
@@ -371,7 +371,7 @@ In this block, the following parameters are set:
         [edit]
           root@vsrx#
           set security ipsec proposal ipsec-phase2-proposal protocol esp
-          set security ipsec proposal ipsec-phase2-proposal lifetime-seconds 3600
+          set security ipsec proposal ipsec-phase2-proposal lifetime-seconds 10800
           set security ipsec proposal ipsec-phase2-proposal authentication-algorithm hmac-sha-256-128
           set security ipsec proposal ipsec-phase2-proposal encryption-algorithm aes-256-cbc
           set security ipsec policy ipsec_pol_home-2-gcp-vpn perfect-forward-secrecy keys group14
